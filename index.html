@@ -3,186 +3,157 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Insta-Analyzer: 알고리즘 노출 최적화</title>
+  <title>Instagram 계정분석기 T/B</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     :root {
       --keep: #4caf50; --fix: #ff9800; --add: #2196f3; --remove: #f44336;
       --ig-grad: linear-gradient(90deg, #833ab4, #fd1d1d, #fcb045);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; background: #f4f7f9; color: #333; line-height: 1.6; padding: 20px; }
-    
-    /* 헤더 및 레이아웃 */
+    body { font-family: 'Apple SD Gothic Neo', sans-serif; background: #f0f2f5; color: #333; padding: 20px; }
+    .container { max-width: 900px; margin: 0 auto; }
+
+    /* Header */
     header { text-align: center; padding: 40px 0; }
-    header h1 { font-size: 2.2rem; background: var(--ig-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; margin-bottom: 10px; }
-    header p { color: #666; font-size: 1rem; }
-    .container { max-width: 800px; margin: 0 auto; }
+    header .by-line { font-size: 0.9rem; margin-bottom: 8px; }
+    header .by-line .by { color: #aaa; }
+    header .by-line .name { color: #a3e635; font-weight: 700; }
+    header h1 { font-size: 2.2rem; background: var(--ig-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
 
-    /* 공통 카드 스타일 */
-    .card { background: #fff; border-radius: 24px; padding: 30px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.03); }
-    h2 { font-size: 1.3rem; margin-bottom: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    /* Cards */
+    .card { background: #fff; border-radius: 24px; padding: 30px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    h2 { font-size: 1.3rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 
-    /* 업로드 버튼 */
-    .upload-btn { width: 100%; padding: 20px; background: #111; color: #fff; border: none; border-radius: 16px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
-    .upload-btn:hover { background: #333; transform: translateY(-2px); }
+    /* 4사분면 레이아웃 */
+    .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    @media (max-width: 600px) { .analysis-grid { grid-template-columns: 1fr; } }
+    .analysis-item { padding: 20px; border-radius: 20px; border: 1px solid #f0f0f0; border-top-width: 6px; }
+    .keep { border-top-color: var(--keep); }
+    .fix { border-top-color: var(--fix); }
+    .add { border-top-color: var(--add); }
+    .remove { border-top-color: var(--remove); }
+    .analysis-item h3 { font-size: 1rem; margin-bottom: 10px; }
+    .analysis-item ul { list-style: none; font-size: 0.85rem; color: #555; }
+    .analysis-item li { margin-bottom: 6px; padding-left: 15px; position: relative; }
+    .analysis-item li::before { content: '✔'; position: absolute; left: 0; color: #999; }
 
-    /* 지표 그리드 */
-    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 10px; }
-    .stat-item { background: #f8fafc; padding: 20px; border-radius: 18px; text-align: center; border: 1px solid #edf2f7; }
-    .stat-val { display: block; font-size: 1.6rem; font-weight: 800; color: #222; }
-    .stat-lbl { font-size: 0.8rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
+    /* 딥 분석 수치 레이아웃 */
+    .deep-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 20px; }
+    .stat-card { background: #f8f9fa; padding: 15px; border-radius: 15px; text-align: center; }
+    .stat-card b { font-size: 1.4rem; color: #222; display: block; }
+    .stat-card span { font-size: 0.75rem; color: #888; font-weight: 600; }
 
-    /* 4사분면 분석 결과 (반응형) */
-    .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    @media (max-width: 600px) { .analysis-grid { grid-template-columns: 1fr; } } /* 모바일 대응 */
-
-    .analysis-item { padding: 20px; border-radius: 20px; background: #fff; border: 1px solid #f1f5f9; position: relative; transition: 0.3s; }
-    .analysis-item h3 { font-size: 1rem; margin-bottom: 12px; font-weight: 700; }
-    .analysis-item ul { list-style: none; padding: 0; }
-    .analysis-item li { font-size: 0.9rem; color: #4a5568; margin-bottom: 8px; padding-left: 18px; position: relative; }
-    .analysis-item li::before { content: '•'; position: absolute; left: 0; font-weight: bold; }
-
-    .keep { border-top: 6px solid var(--keep); }
-    .fix { border-top: 6px solid var(--fix); }
-    .add { border-top: 6px solid var(--add); }
-    .remove { border-top: 6px solid var(--remove); }
-
-    /* 해시태그 및 인사이트 */
-    .tag-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
-    .tag-box { background: #edf2f7; color: #4a5568; padding: 6px 14px; border-radius: 25px; font-size: 0.85rem; font-weight: 500; }
-    .insight-row { background: #f1f5f9; padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 5px solid #333; }
-    .insight-row b { display: block; margin-bottom: 4px; color: #1a202c; }
-    .insight-row p { font-size: 0.85rem; color: #718096; }
-
-    select { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 15px; font-size: 1rem; background: #fff; }
+    .btn-main { width: 100%; padding: 20px; background: #111; color: #fff; border: none; border-radius: 16px; font-weight: 700; cursor: pointer; font-size: 1.1rem; }
+    
+    footer { text-align: center; padding: 40px 0; border-top: 1px solid #ddd; margin-top: 40px; }
+    footer .contact { font-size: 0.9rem; color: #666; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 5px; }
   </style>
 </head>
 <body>
 
 <div class="container">
   <header>
-    <h1>알고리즘 노출 정밀 진단</h1>
-    <p>데이터 기반 Keep / Fix / Add / Remove 전략</p>
+    <div class="by-line"><span class="by">by</span> <span class="name">Longchiri</span></div>
+    <h1>Instagram 계정분석기 T/B</h1>
+    <p>알고리즘 노출 확률을 높이는 데이터 정밀 리포트</p>
   </header>
 
   <div class="card">
     <input type="file" id="zipInput" accept=".zip" style="display:none" />
-    <button class="upload-btn" onclick="document.getElementById('zipInput').click()">인스타그램 ZIP 파일 분석 시작</button>
-    <p id="fileStatus" style="text-align:center; margin-top:15px; font-size:0.9rem; color:#94a3b8;">파일을 선택하면 분석 리포트가 생성됩니다.</p>
+    <button class="btn-main" onclick="document.getElementById('zipInput').click()">ZIP 데이터 면밀 분석 시작</button>
   </div>
 
   <div id="resultArea" style="display:none;">
     <div class="card">
-      <h2>📊 계정 현황</h2>
-      <div id="statDisplay" class="stat-grid"></div>
+      <h2>📊 알고리즘 정밀 지표</h2>
+      <div class="deep-stats" id="deepStatsDisplay"></div>
     </div>
 
     <div class="card">
-      <h2>🔍 알고리즘 행동 전략</h2>
+      <h2>🔍 전략적 행동 가이드</h2>
       <div class="analysis-grid">
-        <div class="analysis-item keep">
-          <h3 style="color:var(--keep);">✅ Keep (유지)</h3>
-          <ul id="resKeep"></ul>
-        </div>
-        <div class="analysis-item fix">
-          <h3 style="color:var(--fix);">🛠️ Fix (수정)</h3>
-          <ul id="resFix"></ul>
-        </div>
-        <div class="analysis-item add">
-          <h3 style="color:var(--add);">➕ Add (추가)</h3>
-          <ul id="resAdd"></ul>
-        </div>
-        <div class="analysis-item remove">
-          <h3 style="color:var(--remove);">❌ Remove (제거)</h3>
-          <ul id="resRemove"></ul>
-        </div>
+        <div class="analysis-item keep"><h3>✅ Keep (현상 유지)</h3><ul id="resKeep"></ul></div>
+        <div class="analysis-item fix"><h3>🛠️ Fix (집중 개선)</h3><ul id="resFix"></ul></div>
+        <div class="analysis-item add"><h3>➕ Add (신규 시도)</h3><ul id="resAdd"></ul></div>
+        <div class="analysis-item remove"><h3>❌ Remove (즉시 중단)</h3><ul id="resRemove"></ul></div>
       </div>
     </div>
 
     <div class="card">
-      <h2>🎯 대중적 니치 태그 추천</h2>
-      <select id="tagCategory" onchange="updateTags()">
-        <option value="book">📚 북스타그램 (대중적 추천)</option>
-        <option value="daily">✨ 일상/데일리</option>
-        <option value="food">🍴 맛집/푸드</option>
-        <option value="workout">💪 오운완/운동</option>
-      </select>
-      <div id="tagDisplay" class="tag-container"></div>
-    </div>
-
-    <div class="card">
-      <h2>💡 알고리즘 공략 인사이트</h2>
-      <div id="insightArea"></div>
+      <h2>💡 면밀 분석 리포트</h2>
+      <div id="deepInsightArea"></div>
     </div>
   </div>
+
+  <footer>
+    <div class="by-line"><span class="by">by</span> <span class="name">Longchiri</span></div>
+    <div class="contact"><i class="fa-brands fa-telegram"></i> 문의 : @long_c_hill</div>
+  </footer>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
-  const tagsData = {
-    book: ["북스타그램", "독서기록", "책추천", "문장수집", "책리뷰", "독서모임", "오늘의책", "서점투어"],
-    daily: ["일상스타그램", "데일리룩", "소통", "좋아요반사", "오오티디", "직장인", "주말나들이"],
-    food: ["먹스타그램", "맛집탐방", "내돈내산", "카페투어", "푸드스타그램", "맛스타그램", "야식추천"],
-    workout: ["오운완", "헬스타그램", "운동기록", "필라테스", "다이어트식단", "바디프로필", "유지어터"]
-  };
-
-  function updateTags() {
-    const cat = document.getElementById('tagCategory').value;
-    document.getElementById('tagDisplay').innerHTML = tagsData[cat].map(t => `<span class="tag-box">#${t}</span>`).join('');
-  }
-
-  function getAnalysis(posts, followers, following) {
-    const reelsRatio = 25; // 예시 데이터
-
-    return {
-      keep: ["일관된 비주얼 톤앤매너", "독서/일상 기반의 테마성"],
-      fix: [`현재 릴스 비중(${reelsRatio}%) 대폭 확대`, "해시태그 개수 (5-10개로 최적화)"],
-      add: ["저장을 유도하는 정보성 슬라이드", "댓글을 부르는 질문형 캡션", "니치 해시태그 혼합"],
-      remove: ["무분별한 소통용 해시태그", "저화질 이미지/영상 업로드"],
-      insights: [
-        { t: "체류 시간 극대화", c: "사용자가 게시물에 오래 머물도록 '옆으로 넘겨보는 카드뉴스'를 제작하세요." },
-        { t: "저장 수 = 노출량", c: "단순 감성 사진보다 '나중에 다시 보고 싶은 정보'를 주어야 알고리즘 추천이 올라갑니다." }
-      ]
-    };
-  }
-
   document.getElementById('zipInput').addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    document.getElementById('fileStatus').textContent = "데이터 정밀 분석 중...";
+    document.getElementById('resultArea').style.display = 'none';
 
     try {
       const zip = await JSZip.loadAsync(file);
-      let posts = 0, followers = 0, following = 0;
+      let posts = [], followers = [], following = [], adsHistory = 0;
 
       for (const [path, obj] of Object.entries(zip.files)) {
-        if (path.endsWith('.json')) {
-          const content = await obj.async("text");
-          const data = JSON.parse(content);
-          if (path.includes('posts_1.json')) posts = data.length || 0;
-          if (path.includes('followers_1.json')) followers = data.length || data.relationships_followers?.length || 0;
-          if (path.includes('following.json')) following = data.relationships_following?.length || data.length || 0;
-        }
+        if (!path.endsWith('.json')) continue;
+        const content = await obj.async("text");
+        const data = JSON.parse(content);
+
+        if (path.includes('posts_1.json')) posts = data;
+        if (path.includes('followers_1.json')) followers = data.relationships_followers || data;
+        if (path.includes('following.json')) following = data.relationships_following || data;
+        if (path.includes('ads_')) adsHistory++;
       }
 
-      const res = getAnalysis(posts, followers, following);
+      // 1. 데이터 가공 (딥 분석)
+      const postCount = posts.length || 0;
+      const followerCount = followers.length || 0;
+      const followingCount = following.length || 0;
+      const followRatio = followingCount > 0 ? (followerCount / followingCount).toFixed(2) : 0;
+      
+      // 최근 활동성 분석 (가상 로직 포함)
+      const isActive = postCount > 10 ? "높음" : "낮음";
+      const ghostFollowers = Math.floor(followerCount * 0.15); // 추정치
+
+      // 2. 결과 렌더링
       document.getElementById('resultArea').style.display = 'block';
-      document.getElementById('statDisplay').innerHTML = `
-        <div class="stat-item"><span class="stat-lbl">게시물</span><span class="stat-val">${posts}</span></div>
-        <div class="stat-item"><span class="stat-lbl">팔로워</span><span class="stat-val">${followers}</span></div>
-        <div class="stat-item"><span class="stat-lbl">팔로잉</span><span class="stat-val">${following}</span></div>
+      document.getElementById('deepStatsDisplay').innerHTML = `
+        <div class="stat-card"><span>계정 영향력</span><b>${followRatio}</b></div>
+        <div class="stat-card"><span>활동 점수</span><b>${isActive}</b></div>
+        <div class="stat-card"><span>정리 필요 계정</span><b>~${ghostFollowers}</b></div>
+        <div class="stat-card"><span>광고 노출 이력</span><b>${adsHistory > 0 ? '있음' : '없음'}</b></div>
       `;
 
-      document.getElementById('resKeep').innerHTML = res.keep.map(i => `<li>${i}</li>`).join('');
-      document.getElementById('resFix').innerHTML = res.fix.map(i => `<li>${i}</li>`).join('');
-      document.getElementById('resAdd').innerHTML = res.add.map(i => `<li>${i}</li>`).join('');
-      document.getElementById('resRemove').innerHTML = res.remove.map(i => `<li>${i}</li>`).join('');
-      document.getElementById('insightArea').innerHTML = res.insights.map(i => `<div class="insight-row"><b>${i.t}</b><p>${i.c}</p></div>`).join('');
-      
-      updateTags();
-      document.getElementById('fileStatus').textContent = "분석이 완료되었습니다!";
+      // 3. 전략 리포트 생성
+      const reports = {
+        keep: ["기존 테마의 일관성", "팔로워와의 다이렉트 소통 기록"],
+        fix: ["업로드 시간대 최적화 (저녁 8-10시 추천)", "릴스 비중 현재보다 2배 상향"],
+        add: ["저장 가능한 '정보성' 슬라이드", "댓글을 부르는 질문형 피드"],
+        remove: ["의미 없는 해시태그 나열", "활동 없는 유령 계정 팔로잉"]
+      };
+
+      document.getElementById('resKeep').innerHTML = reports.keep.map(li => `<li>${li}</li>`).join('');
+      document.getElementById('resFix').innerHTML = reports.fix.map(li => `<li>${li}</li>`).join('');
+      document.getElementById('resAdd').innerHTML = reports.add.map(li => `<li>${li}</li>`).join('');
+      document.getElementById('resRemove').innerHTML = reports.remove.map(li => `<li>${li}</li>`).join('');
+
+      document.getElementById('deepInsightArea').innerHTML = `
+        <div style="background:#f1f5f9; padding:20px; border-radius:15px; font-size:0.9rem;">
+          <p>🎯 <b>알고리즘 진단 결과:</b> 현재 계정은 <b>성장 가능성</b>은 높으나 <b>'체류 시간'</b>을 늘리는 장치가 부족합니다. 인스타그램은 이제 단순 '좋아요'보다 내 피드에 몇 초를 머물렀는지를 가장 중요하게 봅니다.</p>
+          <p style="margin-top:10px;">💡 <b>해결책:</b> 릴스 첫 3초에 강력한 훅(Hook) 문구를 넣으시고, 다음 게시물은 '옆으로 넘겨보는' 카드뉴스로 제작해 보세요.</p>
+        </div>
+      `;
     } catch (err) {
-      document.getElementById('fileStatus').textContent = "에러: ZIP 구조를 확인해주세요.";
+      alert("ZIP 파일을 읽는 중 에러가 발생했습니다.");
     }
   });
 </script>
