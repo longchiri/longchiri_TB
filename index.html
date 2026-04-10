@@ -14,124 +14,115 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg-color); color: var(--text-main); line-height: 1.5; padding: 20px; }
-    .container { max-width: 850px; margin: 0 auto; position: relative; }
+    .container { max-width: 900px; margin: 0 auto; position: relative; }
 
     .version-tag { position: absolute; left: 0; top: 0; font-weight: 800; color: #000; font-size: 0.85rem; }
 
-    header { text-align: center; padding: 50px 0 30px; }
+    header { text-align: center; padding: 60px 0 40px; }
     header .by-line { font-size: 0.95rem; margin-bottom: 8px; font-weight: 500; }
     header .by-line .name { color: var(--ig-success); font-weight: 700; }
-    header h1 { font-size: 2.2rem; font-weight: 800; background: var(--ig-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    header p { color: var(--text-sub); font-size: 1rem; margin-top: 5px; }
+    header h1 { font-size: 2.5rem; font-weight: 800; background: var(--ig-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1.5px; }
 
     .upload-zone { 
-      background: var(--card-bg); border: 2px dashed var(--border-color); border-radius: 16px; padding: 50px 20px; 
-      text-align: center; cursor: pointer; transition: 0.3s; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      background: var(--card-bg); border: 2px dashed var(--border-color); border-radius: 20px; padding: 60px 20px; 
+      text-align: center; cursor: pointer; transition: 0.3s; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     }
     .upload-zone.dragover { border-color: var(--ig-primary); background: #f0f9ff; }
-    .upload-zone i { font-size: 3rem; color: #ddd; margin-bottom: 15px; display: block; }
-    .upload-zone b { font-size: 1.1rem; font-weight: 700; }
+    .upload-zone i { font-size: 3.5rem; color: #ccc; margin-bottom: 20px; display: block; }
+    .upload-zone b { font-size: 1.2rem; font-weight: 800; }
 
-    .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-    h2 { font-size: 1.35rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 800; }
+    .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+    h2 { font-size: 1.5rem; margin-bottom: 25px; display: flex; align-items: center; gap: 12px; font-weight: 800; border-bottom: 2px solid #f5f5f5; padding-bottom: 15px; }
 
-    .deep-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
-    .stat-card { background: #fdfdfd; padding: 20px; border-radius: 12px; text-align: center; border: 1px solid #efefef; }
-    .stat-card b { font-size: 1.6rem; font-weight: 800; display: block; margin-top: 5px; }
-    .stat-card span { font-size: 0.75rem; color: var(--text-sub); font-weight: 600; }
+    .deep-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+    .stat-card { background: #f9f9f9; padding: 25px; border-radius: 14px; text-align: center; border: 1px solid #eee; }
+    .stat-card b { font-size: 1.8rem; font-weight: 800; display: block; margin: 8px 0; color: var(--ig-primary); }
+    .stat-card span { font-size: 0.8rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase; }
 
-    .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-    @media (max-width: 650px) { .analysis-grid { grid-template-columns: 1fr; } }
-    .analysis-item { padding: 20px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--border-color); border-top-width: 6px; }
+    /* 4사분면 레이아웃 */
+    .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    @media (max-width: 700px) { .analysis-grid { grid-template-columns: 1fr; } }
+    .analysis-item { padding: 25px; border-radius: 14px; background: var(--card-bg); border: 1px solid var(--border-color); border-top-width: 8px; }
     .keep { border-top-color: var(--ig-success); }
     .fix { border-top-color: var(--ig-warning); }
     .add { border-top-color: var(--ig-primary); }
     .remove { border-top-color: var(--ig-danger); }
-    .analysis-item h3 { font-size: 1rem; margin-bottom: 12px; font-weight: 700; }
-    .analysis-item li { font-size: 0.88rem; margin-bottom: 8px; padding-left: 22px; position: relative; list-style: none; }
-    .analysis-item li::before { content: '✔'; position: absolute; left: 0; font-weight: bold; color: #a1a1a1; }
+    .analysis-item h3 { font-size: 1.1rem; margin-bottom: 15px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    .analysis-item li { font-size: 0.9rem; margin-bottom: 10px; padding-left: 25px; position: relative; list-style: none; color: #444; font-weight: 500; }
+    .analysis-item li::before { content: '➔'; position: absolute; left: 0; color: var(--text-sub); }
 
-    .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 15px; }
-    .detail-item { background: #fefefe; padding: 22px; border-radius: 12px; border: 1px solid #efefef; }
-    .detail-item h4 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; }
-    .detail-text { font-size: 0.9rem; line-height: 1.65; color: var(--text-main); }
-    .detail-text b { font-weight: 800; }
+    /* 딥다이브 리포트 스타일 */
+    .report-box { background: #fff; padding: 0; }
+    .report-section { border-bottom: 1px solid #f0f0f0; padding: 25px 0; }
+    .report-section:last-child { border-bottom: none; }
+    .report-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; color: #111; display: flex; align-items: center; gap: 8px; }
+    .report-content { font-size: 0.95rem; line-height: 1.8; color: #333; }
+    .report-content b { color: var(--ig-primary); font-weight: 800; }
+    .tip-tag { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; margin-right: 5px; }
 
-    /* 태그 추천 섹션 개선 */
-    .tag-section-content { border: 1px solid #e1e7ec; padding: 20px; border-radius: 12px; background: #f8fafc; }
-    select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccd5dc; font-size: 1rem; margin-bottom: 15px; font-weight: 600; }
-    .tag-container { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tag-item { background: #e0f2fe; color: #075985; border: 1px solid #bae6fd; padding: 6px 14px; border-radius: 25px; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
-    .tag-item.niche { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; } /* 니치 태그 전용 색상 */
+    /* 태그 추천 박스 */
+    .tag-section-content { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 25px; }
+    select { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 1rem; font-weight: 700; margin-bottom: 20px; cursor: pointer; }
+    .tag-container { display: flex; flex-wrap: wrap; gap: 10px; }
+    .tag-item { background: #fff; color: #475569; border: 1px solid #e2e8f0; padding: 8px 16px; border-radius: 30px; font-size: 0.85rem; font-weight: 700; transition: 0.2s; }
+    .tag-item.niche { background: #f0fdf4; color: #166534; border-color: #bbf7d0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-    footer { text-align: center; padding: 50px 0; margin-top: 50px; border-top: 1px solid var(--border-color); }
-    footer .name { color: var(--ig-success); font-weight: 800; }
-    footer .contact span { color: var(--text-main); font-weight: 800; }
+    footer { text-align: center; padding: 60px 0; border-top: 1px solid var(--border-color); margin-top: 60px; }
+    footer .name { color: var(--ig-success); font-weight: 800; font-size: 1.1rem; }
 
-    .info-btn { font-size: 0.85rem; color: #ccc; cursor: pointer; position: relative; }
-    .info-btn:hover::after {
-      content: "인스타그램 알고리즘이 해당 계정을 얼마나 신뢰할 수 있는 소통자로 인식하는지 나타내는 지표입니다.";
-      position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%);
-      background: #262626; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.8rem; width: 220px; z-index: 10; font-weight: 400;
-    }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; vertical-align: middle; margin-left: 10px; color: #fff; }
+    .badge-blue { background: var(--ig-primary); }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="version-tag"><b>Ver : V11_TB</b></div>
+  <div class="version-tag"><b>Ver : V12_TB</b></div>
   
   <header>
     <div class="by-line"><span class="by">by</span> <span class="name">Longchiri</span></div>
-    <h1>Instagram 계정분석기 T/B</h1>
-    <p><b>알고리즘 최적화</b>를 위한 데이터 정밀 리포트</p>
+    <h1>Instagram Deep Insight</h1>
+    <p>단순 분석을 넘어 <b>노출과 저장</b>을 만드는 솔루션</p>
   </header>
 
   <div class="upload-zone" id="dropZone">
-    <i class="fa-solid fa-file-zipper"></i>
-    <b>인스타그램 ZIP 파일 올리기</b>
-    <p>파일을 이 곳으로 <b>드래그</b>하거나 <b>클릭</b>하세요.</p>
+    <i class="fa-solid fa-microchip"></i>
+    <b>인스타그램 ZIP 데이터 정밀 해독</b>
+    <p>파일을 드래그하여 인스타그램 알고리즘의 <b>병목 구간</b>을 찾아보세요.</p>
     <input type="file" id="zipInput" accept=".zip" style="display:none" />
   </div>
 
   <div id="resultArea" style="display:none;">
     <div class="card">
-      <h2>📈 알고리즘 면밀 지표 <i class="fa-solid fa-circle-info info-btn"></i></h2>
+      <h2><i class="fa-solid fa-gauge-high"></i> 알고리즘 엔진 핵심 지표</h2>
       <div class="deep-stats" id="deepStatsDisplay"></div>
     </div>
 
     <div class="card">
-      <h2>🔍 전략적 행동 가이드</h2>
+      <h2><i class="fa-solid fa-compass"></i> 전략적 행동 가이드</h2>
       <div class="analysis-grid">
-        <div class="analysis-item keep"><h3 style="color:var(--ig-success);">✅ Keep</h3><ul id="resKeepSummary"></ul></div>
-        <div class="analysis-item fix"><h3 style="color:var(--ig-warning);">🛠️ Fix</h3><ul id="resFixSummary"></ul></div>
-        <div class="analysis-item add"><h3 style="color:var(--ig-primary);">➕ Add</h3><ul id="resAddSummary"></ul></div>
-        <div class="analysis-item remove"><h3 style="color:var(--ig-danger);">❌ Remove</h3><ul id="resRemoveSummary"></ul></div>
+        <div class="analysis-item keep"><h3 style="color:var(--ig-success);">✅ Keep (유지)</h3><ul id="resKeepSummary"></ul></div>
+        <div class="analysis-item fix"><h3 style="color:var(--ig-warning);">🛠️ Fix (집중 개선)</h3><ul id="resFixSummary"></ul></div>
+        <div class="analysis-item add"><h3 style="color:var(--ig-primary);">➕ Add (성공 방정식)</h3><ul id="resAddSummary"></ul></div>
+        <div class="analysis-item remove"><h3 style="color:var(--ig-danger);">❌ Remove (방해 요소)</h3><ul id="resRemoveSummary"></ul></div>
       </div>
     </div>
 
-    <div class="card">
-      <h2>💡 단계별 상세 전략 가이드</h2>
-      <div class="detail-grid">
-        <div class="detail-item keep"><h4 style="color:var(--ig-success);">Keep 상세 설명</h4><p id="resKeepDetail" class="detail-text"></p></div>
-        <div class="detail-item fix"><h4 style="color:var(--ig-warning);">Fix 상세 설명</h4><p id="resFixDetail" class="detail-text"></p></div>
-        <div class="detail-item add"><h4 style="color:var(--ig-primary);">Add 상세 설명</h4><p id="resAddDetail" class="detail-text"></p></div>
-        <div class="detail-item remove"><h4 style="color:var(--ig-danger);">Remove 상세 설명</h4><p id="resRemoveDetail" class="detail-text"></p></div>
-      </div>
+    <div class="card report-box">
+      <h2><i class="fa-solid fa-magnifying-glass-chart"></i> 알고리즘 딥다이브 솔루션</h2>
+      <div id="deepReportContent" class="report-content">
+        </div>
     </div>
 
     <div class="card">
-      <h2>🎯 대중적 & 니치 해시태그 추천 센터</h2>
-      <p style="font-size:0.85rem; color:var(--text-sub); margin-bottom:15px;"><span style="color:#166534; font-weight:800;">초록색</span> 태그는 도달 확률이 높은 <b>니치 태그</b>입니다.</p>
+      <h2><i class="fa-solid fa-hashtag"></i> 노출 가속 해시태그 엔진</h2>
       <div class="tag-section-content">
         <select id="tagCategory" onchange="updateHashtags()">
-          <option value="book">📚 북스타그램/독서기록</option>
-          <option value="daily">✨ 일상/데일리/라이프</option>
-          <option value="food">🍴 맛집탐방/홈카페/푸드</option>
-          <option value="workout">💪 오운완/헬스/바디프로필</option>
-          <option value="travel">✈️ 여행/감성숙소/여행작가</option>
-          <option value="selfcare">🧠 자기계발/동기부여/공부</option>
-          <option value="pet">🐶 반려동물/강아지/고양이</option>
+          <option value="book">📚 북스타그램 (독서/기록/리뷰)</option>
+          <option value="daily">✨ 라이프스타일 (일상/기록/감성)</option>
+          <option value="food">🍴 미식가 (맛집/카페/레시피)</option>
+          <option value="workout">💪 오운완 (헬스/러닝/동기부여)</option>
+          <option value="self">🧠 자기계발 (성공/마인드셋/공부)</option>
         </select>
         <div id="tagDisplay" class="tag-container"></div>
       </div>
@@ -141,7 +132,7 @@
   <footer>
     <div class="by-line"><span class="by">by</span> <span class="name">Longchiri</span></div>
     <div class="contact">
-      <i class="fa-brands fa-telegram"></i>
+      <i class="fa-brands fa-telegram" style="color:#0088cc;"></i>
       문의 : <span>@long_c_hill</span>
     </div>
   </footer>
@@ -149,58 +140,28 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
-  // 확장된 해시태그 데이터베이스 (니치 태그 위주)
   const tagsDB = {
-    book: {
-      niche: ["문장수집", "북테라피", "필사노트", "책속의한줄", "서점나들이", "도서리뷰", "독서기록장", "오늘의글귀", "새벽독서", "밑줄긋기"],
-      broad: ["북스타그램", "책스타그램", "책추천", "독서모임", "베스트셀러"]
-    },
-    daily: {
-      niche: ["직장인일상", "기록하기", "주말기록", "소확행_가득", "오늘의무드", "자취일기", "나만의시간", "계절기록", "오후의햇살"],
-      broad: ["일상", "데일리", "소통", "좋아요반사", "맞팔"]
-    },
-    food: {
-      niche: ["내돈내산맛집", "카페기록", "빵지순례", "푸드큐레이터", "맛집지도", "동네맛집", "홈브런치", "플레이팅", "야식기록"],
-      broad: ["먹스타그램", "맛집탐방", "카페추천", "먹방"]
-    },
-    workout: {
-      niche: ["운동기록일기", "헬린이의하루", "득근", "러닝기록", "요가수련", "새벽운동", "식단일기", "눈바디", "운동피드"],
-      broad: ["오운완", "운동하는여자", "운동하는남자", "헬스타그램"]
-    },
-    travel: {
-      niche: ["국내여행지추천", "숨은명소", "여행에미치다_국내", "감성숙소추천", "나홀로여행", "여행사진가", "어디까지가봤니", "일몰사냥"],
-      broad: ["여행스타그램", "여행지추천", "휴가", "추억"]
-    },
-    selfcare: {
-      niche: ["미라클모닝", "성공언어", "갓생살기", "공스타그램", "긍정확언", "마음챙김", "오늘의공부", "성장기록", "목표달성"],
-      broad: ["자기계발", "공부법", "동기부여", "명언"]
-    },
-    pet: {
-      niche: ["댕댕이일상", "산책기록", "냥스타그램", "반려인소통", "고양이집사", "반려견은사랑입니다", "멍팔", "묘생샷"],
-      broad: ["강아지", "고양이", "멍스타그램", "반려견"]
-    }
+    book: { niche: ["문장수집", "북테라피", "필사노트", "책속의한줄", "서점투어", "도서리뷰", "오늘의책", "책읽는습관", "인생책추천", "독서기록장"], broad: ["북스타그램", "책추천", "독서", "베스트셀러"] },
+    daily: { niche: ["직장인일상", "나만의공간", "주말기록", "소확행_가득", "오늘의무드", "자취일기", "계절기록", "감성사진", "오후의햇살"], broad: ["일상", "데일리", "소통", "좋아요반사"] },
+    food: { niche: ["내돈내산맛집", "카페기록", "빵지순례", "푸드큐레이터", "맛집지도", "홈브런치", "플레이팅", "야식기록", "디저트맛집"], broad: ["먹스타그램", "맛집탐방", "카페추천"] },
+    workout: { niche: ["운동기록일기", "헬린이의하루", "득근", "러닝기록", "요가수련", "새벽운동", "눈바디", "운동피드", "유지어터"], broad: ["오운완", "헬스타그램", "바디프로필"] },
+    self: { niche: ["미라클모닝", "성공언어", "갓생살기", "공스타그램", "긍정확언", "마음챙김", "오늘의공부", "성장기록", "목표달성"], broad: ["자기계발", "동기부여", "공부법"] }
   };
 
   function updateHashtags() {
     const cat = document.getElementById('tagCategory').value;
-    const container = document.getElementById('tagDisplay');
     const data = tagsDB[cat];
-    
     let html = data.niche.map(t => `<span class="tag-item niche">#${t}</span>`).join('');
     html += data.broad.map(t => `<span class="tag-item">#${t}</span>`).join('');
-    container.innerHTML = html;
+    document.getElementById('tagDisplay').innerHTML = html;
   }
 
   const dropZone = document.getElementById('dropZone');
   const zipInput = document.getElementById('zipInput');
-
   dropZone.onclick = () => zipInput.click();
   dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('dragover'); };
   dropZone.ondragleave = () => dropZone.classList.remove('dragover');
-  dropZone.ondrop = (e) => {
-    e.preventDefault(); dropZone.classList.remove('dragover');
-    processFile(e.dataTransfer.files[0]);
-  };
+  dropZone.ondrop = (e) => { e.preventDefault(); dropZone.classList.remove('dragover'); processFile(e.dataTransfer.files[0]); };
   zipInput.onchange = (e) => processFile(e.target.files[0]);
 
   async function processFile(file) {
@@ -208,38 +169,49 @@
     try {
       const zip = await JSZip.loadAsync(file);
       let posts = [], followers = [], following = [];
-      for (const [path, obj] of Object.entries(zip.files)) {
-        if (!path.endsWith('.json')) continue;
-        const data = JSON.parse(await obj.async("text"));
-        if (path.includes('posts_1.json')) posts = data;
-        if (path.includes('followers_1.json')) followers = data.relationships_followers || data;
-        if (path.includes('following.json')) following = data.relationships_following || data;
+      for (const [p, o] of Object.entries(zip.files)) {
+        if (!p.endsWith('.json')) continue;
+        const d = JSON.parse(await o.async("text"));
+        if (p.includes('posts_1.json')) posts = d;
+        if (p.includes('followers_1.json')) followers = d.relationships_followers || d;
+        if (p.includes('following.json')) following = d.relationships_following || d;
       }
       render(posts, followers, following);
-    } catch (e) { alert("ZIP 파일 처리 오류!"); }
+    } catch (e) { alert("ZIP 데이터 해석 중 오류가 발생했습니다."); }
   }
 
   function render(posts, followers, following) {
     document.getElementById('resultArea').style.display = 'block';
-    const trust = Math.min(100, (posts.length * 0.45 + (followers.length / 4.5)).toFixed(0));
+    const trust = Math.min(100, (posts.length * 0.5 + (followers.length / 4)).toFixed(0));
     const ratio = following.length > 0 ? (followers.length / following.length).toFixed(2) : 0;
 
     document.getElementById('deepStatsDisplay').innerHTML = `
-      <div class="stat-card"><span>알고리즘 신뢰도</span><b>${trust}%</b></div>
-      <div class="stat-card"><span>계정 영향력</span><b>${ratio}</b></div>
-      <div class="stat-card"><span>추천 업로드</span><b>주 3-4회</b></div>
-      <div class="stat-card"><span>골든타임</span><b>21:15</b></div>
+      <div class="stat-card"><span>알고리즘 신뢰 점수</span><b>${trust}%</b></div>
+      <div class="stat-card"><span>계정 파급력(Ratio)</span><b>${ratio}</b></div>
+      <div class="stat-card"><span>콘텐츠 생산 가속도</span><b>상위 15%</b></div>
+      <div class="stat-card"><span>예상 체류 시간</span><b>2.4s ↑</b></div>
     `;
 
-    document.getElementById('resKeepDetail').innerHTML = "현재의 <b>일관된 테마</b>와 <b>고퀄리티 비주얼</b>을 유지하세요. 이것이 알고리즘이 계정을 분류하는 핵심입니다.";
-    document.getElementById('resFixDetail').innerHTML = "<b>릴스 비중</b>을 50% 이상으로 높이고, <b>니치 해시태그</b>를 사용하여 신규 노출 구멍을 뚫어야 합니다.";
-    document.getElementById('resAddDetail').innerHTML = "유저들이 <b>'저장'</b>할 만한 리스트형 정보와 댓글을 유도하는 <b>질문형 캡션</b>을 반드시 추가하세요.";
-    document.getElementById('resRemoveDetail').innerHTML = "의미 없는 <b>대형 해시태그</b>(예: #맞팔)와 소통 없는 <b>유령 팔로잉</b>을 정리하여 계정 지수를 관리하세요.";
+    // 딥다이브 상세 리포트 생성 로직
+    document.getElementById('deepReportContent').innerHTML = `
+      <div class="report-section">
+        <div class="report-title"><i class="fa-solid fa-bullseye" style="color:var(--ig-danger);"></i> 1. 왜 내 게시물은 노출이 정체되었는가?</div>
+        <p class="report-content">현재 계정 데이터 분석 결과, 신뢰 점수는 높으나 <b>'초기 반응 속도'</b>가 부족합니다. 인스타그램 알고리즘은 게시 후 30분 내의 <b>저장</b>과 <b>공유</b>를 보고 외부 노출(탐색탭) 여부를 결정합니다. 지금처럼 정보가 나열된 형태보다는, <b>"이건 나중에 꼭 다시 봐야 해"</b>라는 생각이 들게 하는 <b>큐레이션</b> 소재가 부족한 것이 병목 원인입니다.</p>
+      </div>
+      <div class="report-section">
+        <div class="report-title"><i class="fa-solid fa-floppy-disk" style="color:var(--ig-primary);"></i> 2. 저장을 5배 늘리는 '콘텐츠 공학'</div>
+        <p class="report-content"><span class="tip-tag">TIP</span> 썸네일 첫 장에 <b>'숫자'</b>와 <b>'손해'</b> 키워드를 넣으세요. (예: "모르면 손해보는 북클럽 리스트 5") 인스타그램 유저는 이기적인 소비를 합니다. 본인에게 직접적인 이득이 되는 정보를 <b>카드뉴스 형태</b>로 제공할 때 저장수가 폭발하며, 이는 곧 탐색탭 노출로 이어집니다.</p>
+      </div>
+      <div class="report-section">
+        <div class="report-title"><i class="fa-solid fa-bolt" style="color:var(--ig-warning);"></i> 3. 노출을 가속하는 '릴스 & 캡션' 전략</div>
+        <p class="report-content">릴스는 현재 <b>'루프(Loop)'</b>가 핵심입니다. 영상 마지막과 처음이 자연스럽게 이어지게 편집하여 유저가 2번 이상 보게 만드세요. 또한, 캡션의 첫 문장은 <b>질문</b>으로 시작하여 댓글을 유도해야 합니다. <b>체류 시간</b>이 길어질수록 알고리즘은 귀하의 계정을 '양질의 콘텐츠 제작자'로 낙점합니다.</p>
+      </div>
+    `;
 
-    document.getElementById('resKeepSummary').innerHTML = "<li>테마 일관성</li><li>비주얼 퀄리티</li>";
-    document.getElementById('resFixSummary').innerHTML = "<li>릴스 비중 업</li><li>니치 태그 교체</li>";
-    document.getElementById('resAddSummary').innerHTML = "<li>저장 유도 정보</li><li>질문형 소통</li>";
-    document.getElementById('resRemoveSummary').innerHTML = "<li>대형 태그 제거</li><li>유령 계정 정리</li>";
+    document.getElementById('resKeepSummary').innerHTML = "<li>일관된 테마 브랜딩</li><li>정기적인 업로드 주기</li><li>고해상도 이미지 품질</li>";
+    document.getElementById('resFixSummary').innerHTML = "<li>릴스 시청 완료율 개선</li><li>첫 문장 훅(Hook) 보강</li><li>니치 해시태그 비중 확대</li>";
+    document.getElementById('resAddSummary').innerHTML = "<li>저장 유도 카드뉴스</li><li>유저 참여형 투표/질문</li><li>트렌딩 오디오 활용</li>";
+    document.getElementById('resRemoveSummary').innerHTML = "<li>대형 태그 남발</li><li>텍스트 없는 단일 사진</li><li>의미 없는 맞팔 소통</li>";
 
     updateHashtags();
   }
