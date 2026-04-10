@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Insta-Analyzer Pro V33</title>
+  <title>Insta-Analyzer Pro V36</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     :root {
       --ig-primary: #0095f6; --ig-success: #4caf50; --ig-warning: #ff9800; --ig-danger: #ed4956;
@@ -30,10 +32,15 @@
     }
     .upload-zone i { font-size: 5rem; color: #e0e0e0; margin-bottom: 20px; display: block; }
     .upload-zone .highlight { color: #111; font-size: 2.2rem; border-bottom: 5px solid #111; display: inline-block; margin: 10px 0; font-weight: 900; }
-    .upload-zone .sub-info { color: #8e8e8e; font-size: 0.85rem; font-weight: 600; margin-top: 15px; }
 
     .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; margin-bottom: 20px; }
     .section-title { font-size: 1.2rem; font-weight: 900; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+
+    /* 데이터 추출 가이드 스타일 */
+    .guide-box { background: #f0f7ff; border-radius: 15px; padding: 20px; margin-bottom: 25px; border: 1px solid #d0e3ff; }
+    .guide-box h3 { font-size: 1rem; font-weight: 800; margin-bottom: 10px; color: #0056b3; }
+    .guide-box ol { padding-left: 20px; font-size: 0.9rem; font-weight: 600; color: #444; }
+    .guide-box li { margin-bottom: 5px; }
 
     .account-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     .summary-item { background: #fdfdfd; padding: 25px 10px; border-radius: 15px; text-align: center; border: 1px solid #f0f0f0; }
@@ -43,7 +50,7 @@
     .save-exposure-card { background: #f8f9fa; border-radius: 15px; padding: 25px; margin: 20px 0; border: 1px solid #eee; }
     .save-tag { display: inline-block; background: #333; color: #fff; padding: 3px 12px; border-radius: 5px; font-size: 0.75rem; margin-bottom: 15px; font-weight: 800; }
     .gauge-container { background: #e9ecef; border-radius: 10px; height: 16px; margin: 15px 0; overflow: hidden; }
-    .gauge-fill { background: var(--ig-grad); height: 100%; width: 0%; transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+    .gauge-fill { background: var(--ig-grad); height: 0%; width: 0%; transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
 
     .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     @media (max-width: 600px) { .strategy-grid { grid-template-columns: 1fr; } }
@@ -53,26 +60,26 @@
     .strategy-card.fix { border-left-color: var(--ig-warning); }
     .strategy-card.add { border-left-color: var(--ig-primary); }
     .strategy-card.remove { border-left-color: var(--ig-danger); }
+    .strategy-card p { font-size: 0.95rem; color: #333; line-height: 1.8; font-weight: 500; }
 
-    .strategy-card .title-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 15px; }
-    .strategy-card .main-type { font-size: 1.3rem; font-weight: 900; }
-    .strategy-card .sub-type { font-size: 0.9rem; font-weight: 800; color: #777; }
-    .strategy-card p { font-size: 0.95rem; color: #333; line-height: 1.8; font-weight: 500; word-break: keep-all; }
+    .hashtag-category { margin-bottom: 25px; }
+    .hashtag-category h4 { font-size: 0.95rem; font-weight: 800; color: #333; margin-bottom: 12px; padding-left: 10px; border-left: 4px solid var(--ig-primary); }
+    .hashtag-box { background: #f9f9f9; border-radius: 15px; padding: 15px; border: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 6px; }
+    .hashtag-item { background: #fff; border: 1px solid #ddd; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; color: var(--ig-primary); }
 
-    /* 해시태그 섹션 디자인 강화 */
-    .hashtag-category { margin-bottom: 20px; }
-    .hashtag-category h4 { font-size: 0.95rem; font-weight: 800; color: #333; margin-bottom: 10px; padding-left: 10px; border-left: 4px solid var(--ig-primary); }
-    .hashtag-box { background: #f9f9f9; border-radius: 15px; padding: 15px; border: 1px solid #eee; }
-    .hashtag-item { display: inline-block; background: #fff; border: 1px solid #ddd; padding: 4px 10px; border-radius: 20px; margin: 4px; font-size: 0.8rem; font-weight: 700; color: var(--ig-primary); transition: 0.2s; }
-    .hashtag-item:hover { background: var(--ig-primary); color: #fff; border-color: var(--ig-primary); }
+    .action-buttons { display: flex; flex-direction: column; gap: 12px; margin: 30px 0 50px; text-align: center; }
+    .btn { padding: 18px 30px; border-radius: 50px; font-size: 1.05rem; font-weight: 900; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border: none; }
+    .btn-pdf { background: #262626; color: #fff; }
+    .btn-share { background: #fee500; color: #3c1e1e; }
 
-    footer { text-align: center; padding: 60px 0; border-top: 1px dotted #ccc; margin-top: 40px; }
+    footer { text-align: center; padding: 40px 0; border-top: 1px dotted #ccc; }
+    @media print { .action-buttons, .upload-zone, .guide-box { display: none; } }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="version-tag">Ver : V33_TB</div>
+<div class="container" id="mainReport">
+  <div class="version-tag">Ver : V36_TB</div>
   
   <header>
     <div class="by-line">by <span class="name">Longchiri</span></div>
@@ -80,22 +87,29 @@
     <div class="warning-text">해당 내용은 T/B분석기이므로 정확하지 않을 수 있습니다.</div>
   </header>
 
+  <div class="guide-box">
+    <h3><i class="fa-solid fa-circle-info"></i> 데이터 추출 방법</h3>
+    <ol>
+      <li>인스타그램 [설정] > [내 활동] > [내 정보 다운로드] 클릭</li>
+      <li>[정보 복사본 다운로드] 선택 후 파일 형식을 <b>JSON</b>으로 설정</li>
+      <li>다운로드된 <b>ZIP 파일</b>을 아래 영역에 그대로 넣어주세요.</li>
+    </ol>
+  </div>
+
   <div class="upload-zone" id="dropZone">
     <i class="fa-solid fa-cloud-arrow-up"></i>
     <div class="highlight">Instagram 데이터 넣기</div>
-    <div class="sub-info">데이터 추출 방법은 아래 가이드를 확인하세요.</div>
     <input type="file" id="zipInput" accept=".zip" style="display:none" />
   </div>
 
   <div id="resultCard" style="display:none;">
     <div class="card">
-      <h2 class="section-title" id="dynamicTitle"><i class="fa-solid fa-chart-pie"></i> 계정 정밀 진단</h2>
+      <h2 class="section-title" id="dynamicTitle">계정 정밀 진단</h2>
       <div class="account-summary">
         <div class="summary-item"><span>게시물</span><b id="valPosts">0</b></div>
         <div class="summary-item"><span>팔로워</span><b id="valFollowers">0</b></div>
         <div class="summary-item"><span>팔로잉</span><b id="valFollowing">0</b></div>
       </div>
-
       <div class="save-exposure-card">
         <span class="save-tag">SAVE & EXPLORE SCORE</span>
         <h4 style="font-weight:900;"><i class="fa-solid fa-floppy-disk"></i> 저장 및 노출 잠재력 (추정)</h4>
@@ -105,41 +119,34 @@
     </div>
 
     <div class="card">
-      <h2 class="section-title"><i class="fa-solid fa-chess-knight"></i> 데이터 맞춤 행동 전략</h2>
+      <h2 class="section-title"><i class="fa-solid fa-chess"></i> 상세 전략 가이드</h2>
       <div class="strategy-grid">
-        <div class="strategy-card keep"><div class="title-row"><span class="main-type" style="color:var(--ig-success)">Keep</span><span class="sub-type">유지 및 강화</span></div><p id="sKeep"></p></div>
-        <div class="strategy-card fix"><div class="title-row"><span class="main-type" style="color:var(--ig-warning)">Fix</span><span class="sub-type">수정 및 최적화</span></div><p id="sFix"></p></div>
-        <div class="strategy-card add"><div class="title-row"><span class="main-type" style="color:var(--ig-primary)">Add</span><span class="sub-type">신규 전략 추가</span></div><p id="sAdd"></p></div>
-        <div class="strategy-card remove"><div class="title-row"><span class="main-type" style="color:var(--ig-danger)">Remove</span><span class="sub-type">리스크 제거</span></div><p id="sRemove"></p></div>
+        <div class="strategy-card keep"><span style="font-weight:900; color:var(--ig-success); display:block; margin-bottom:10px;">Keep (유지)</span><p id="lKeep"></p></div>
+        <div class="strategy-card fix"><span style="font-weight:900; color:var(--ig-warning); display:block; margin-bottom:10px;">Fix (수정)</span><p id="lFix"></p></div>
+        <div class="strategy-card add"><span style="font-weight:900; color:var(--ig-primary); display:block; margin-bottom:10px;">Add (추가)</span><p id="lAdd"></p></div>
+        <div class="strategy-card remove"><span style="font-weight:900; color:var(--ig-danger); display:block; margin-bottom:10px;">Remove (제거)</span><p id="lRemove"></p></div>
       </div>
     </div>
 
     <div class="card">
-      <h2 class="section-title">💡 단계별 상세 전략 가이드</h2>
-      <div class="strategy-grid">
-        <div class="strategy-card keep"><span class="main-type" style="font-size:1.1rem; display:block; margin-bottom:15px;">Keep 상세 설명</span><p id="lKeep"></p></div>
-        <div class="strategy-card fix"><span class="main-type" style="font-size:1.1rem; display:block; margin-bottom:15px;">Fix 상세 설명</span><p id="lFix"></p></div>
-        <div class="strategy-card add"><span class="main-type" style="font-size:1.1rem; display:block; margin-bottom:15px;">Add 상세 설명</span><p id="lAdd"></p></div>
-        <div class="strategy-card remove"><span class="main-type" style="font-size:1.1rem; display:block; margin-bottom:15px;">Remove 상세 설명</span><p id="lRemove"></p></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2 class="section-title"><i class="fa-solid fa-hashtag"></i> 맞춤형 성장 해시태그 리스트</h2>
-      <p style="font-size:0.85rem; color:#888; margin-bottom:20px;">* 계정 규모에 최적화된 30~50개의 전략적 해시태그를 제안합니다.</p>
-      
+      <h2 class="section-title"><i class="fa-solid fa-hashtag"></i> 맞춤형 성장 해시태그 뱅크 (총 60개+)</h2>
       <div class="hashtag-category">
-        <h4>메인 키워드 (대형 - 인지도 확보)</h4>
+        <h4>성장 가속 (대형/중형 키워드)</h4>
         <div class="hashtag-box" id="tagsLarge"></div>
       </div>
       <div class="hashtag-category">
-        <h4>타겟 키워드 (중형 - 실질적 도달)</h4>
-        <div class="hashtag-box" id="tagsMedium"></div>
+        <h4>니치 타겟팅 (세부 소통/전문성)</h4>
+        <div class="hashtag-box" id="tagsNiche"></div>
       </div>
       <div class="hashtag-category">
-        <h4>니치 키워드 (성장 - 핵심 소통)</h4>
-        <div class="hashtag-box" id="tagsSmall"></div>
+        <h4>라이프스타일 및 관계 형성</h4>
+        <div class="hashtag-box" id="tagsLife"></div>
       </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn btn-pdf" onclick="downloadPDF()"><i class="fa-solid fa-file-pdf"></i> PDF 리포트로 저장하기</button>
+      <button class="btn btn-share" onclick="shareResult()"><i class="fa-solid fa-share-nodes"></i> 결과 공유하기 (카톡/텔레그램)</button>
     </div>
   </div>
 
@@ -149,10 +156,11 @@
   </footer>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
   const zipInput = document.getElementById('zipInput');
   const resultCard = document.getElementById('resultCard');
+  let currentUserId = "user";
+
   document.getElementById('dropZone').onclick = () => zipInput.click();
   zipInput.onchange = (e) => processFile(e.target.files[0]);
 
@@ -160,8 +168,7 @@
     if (!file) return;
     try {
       const zip = await JSZip.loadAsync(file);
-      let posts = [], followers = [], following = [], profile = {};
-      let extractedId = "user";
+      let posts = [], followers = [], following = [];
 
       for (const [path, obj] of Object.entries(zip.files)) {
         const content = await obj.async("text");
@@ -171,7 +178,7 @@
           if (path.includes('followers_1.json')) followers = data.relationships_followers || data;
           if (path.includes('following.json')) following = data.relationships_following || data;
           if (path.includes('personal_information.json')) {
-            extractedId = data.profile_user?.[0]?.string_list_data?.[0]?.value || data.profile_user?.[0]?.value || extractedId;
+            currentUserId = data.profile_user?.[0]?.string_list_data?.[0]?.value || currentUserId;
           }
         } catch(e) {}
       }
@@ -180,43 +187,47 @@
       const fwerL = followers.length || 467;
       const fingL = following.length || 239;
       const er = fingL > 0 ? (fwerL / fingL).toFixed(2) : fwerL;
-      const savePot = Math.min(95.8, (pL * 0.35 + fwerL / 12 + 45)).toFixed(1);
-      const nonReciprocal = Math.max(0, fingL - Math.floor(fwerL * 0.3));
+      const savePot = Math.min(96.5, (pL * 0.25 + fwerL / 11 + 48)).toFixed(1);
+      const nonReciprocal = Math.max(0, fingL - Math.floor(fwerL * 0.35));
 
-      document.getElementById('dynamicTitle').innerHTML = `<i class="fa-solid fa-chart-pie"></i> @${extractedId} 계정의 정밀 진단`;
+      document.getElementById('dynamicTitle').innerHTML = `@${currentUserId} 계정 분석 리포트`;
       document.getElementById('valPosts').innerText = pL;
       document.getElementById('valFollowers').innerText = fwerL;
       document.getElementById('valFollowing').innerText = fingL;
       document.getElementById('saveGauge').style.width = savePot + "%";
-      document.getElementById('saveDesc').innerText = `내 계정의 저장 및 노출 잠재력은 약 ${savePot}%입니다. 알고리즘이 '저장 가치'가 매우 높은 계정으로 분류하고 있습니다. 현재 테마를 절대 놓치지 마세요.`;
+      document.getElementById('saveDesc').innerText = `내 계정의 저장 잠재력은 약 ${savePot}%입니다. 유용한 정보를 담은 콘텐츠 발행 시 폭발적인 도달이 예상됩니다.`;
 
-      document.getElementById('sKeep').innerText = "일관된 테마와 고퀄리티 비주얼 톤앤매너를 유지하세요.";
-      document.getElementById('sFix').innerText = `영향력 지수 ${er}를 개선하기 위한 고관여 소통 전략이 필요합니다.`;
-      document.getElementById('sAdd').innerText = `저장 잠재력 ${savePot}% 폭발을 위해 '정보성 릴스'를 주 2회 추가하세요.`;
-      document.getElementById('sRemove').innerText = `신뢰도 하락 방지를 위해 미맞팔 유령 계정 약 ${nonReciprocal}명을 정리하세요.`;
+      document.getElementById('lKeep').innerHTML = `- 현재 정체성: ${pL}개의 누적 데이터로 명확한 카테고리 형성.<br>- 핵심 포인트: 알고리즘이 계정을 분류하는 기준인 현재의 일관된 톤앤매너를 유지할 것.`;
+      document.getElementById('lFix').innerHTML = `- 현재 지표: 영향력 지수 ${er} 개선을 위해 고관여 소통 필요.<br>- 개선 전략: 미맞팔 유령 계정을 정리하고, 릴스 발행 비중을 전체의 50% 이상으로 설정.`;
+      document.getElementById('lAdd').innerHTML = `- 성장 동력: ${savePot}%의 높은 저장 수치를 도달로 전환.<br>- 실행 과제: 유저가 나중에 다시 꺼내 볼 '정보성/큐레이션' 릴스를 주 2회 고정 발행.`;
+      document.getElementById('lRemove').innerHTML = `- 리스크: 상호작용이 단절된 약 ${nonReciprocal}명의 팔로잉 정리.<br>- 효과: 계정의 상호작용 밀도가 높아져 알고리즘의 탐색 탭 추천 확률 상승.`;
 
-      document.getElementById('lKeep').innerHTML = `
-        - 현재 계정 정체성: ${pL}개의 누적 포스트를 통해 명확한 비주얼 톤을 구축함.<br>
-        - 유지 전략: 인스타그램 알고리즘이 계정을 특정 카테고리로 분류하는 핵심 지표임.<br>
-        - 권장 사항: 탐색 탭 노출을 위해 현재의 고퀄리티 테마를 타협 없이 유지할 것.`;
+      // 대량 해시태그 뱅크 데이터
+      const tags1 = ["#인스타그램", "#일상", "#daily", "#소통", "#좋아요", "#팔로우", "#ootd", "#데일리", "#감성", "#기록", "#루틴", "#성장", "#동기부여", "#자기계발", "#갓생", "#공스타그램", "#눈바디", "#식단", "#공부인증", "#성공"];
+      const tags2 = ["#퍼스널브랜딩", "#지식창업", "#마케터", "#기획자", "#니치마케팅", "#콘텐츠기획", "#브랜딩", "#1인기업", "#자기관리", "#성장일기", "#인사이트", "#비즈니스", "#창업가", "#디지털노마드", "#마인드셋", "#커리어", "#전문성", "#오늘의공부", "#기록의힘", "#아이디어"];
+      const tags3 = ["#일상스타그램", "#맞팔환영", "#소통해요", "#데일리룩", "#카페투어", "#독서", "#책스타그램", "#여행에미치다", "#운동하는여자", "#운동하는남자", "#힐링", "#좋반", "#첫줄", "#먹스타그램", "#주말나들이", "#직장인스타그램", "#퇴근후", "#소확행", "#감성사진", "#오늘의기록"];
       
-      document.getElementById('lFix').innerHTML = `
-        - 현재 영향력 진단: 영향력 지수 ${er}은 새로운 성장의 분기점에 위치함.<br>
-        - 개선 방법: 상호작용이 없는 팔로잉을 정리하여 '팔로워 대비 반응률'을 극대화할 것.<br>
-        - 노출 전략: 일반 포스트보다 도달력이 3배 높은 릴스 비중을 50% 이상으로 상향할 것.`;
-
-      // 해시태그 자동 생성 로직 (30개 이상 대량 생성)
-      const tagsLarge = ["#인스타그램", "#일상", "#daily", "#맞팔", "#소통", "#좋아요", "#팔로우", "#ootd", "#데일리", "#감성"];
-      const tagsMedium = ["#동기부여", "#자기계발", "#기록", "#루틴", "#성장기록", "#커리어", "#인사이트", "#공스타그램", "#글귀", "#명언", "#갓생", "#갓생살기", "#습관", "#성공"];
-      const tagsSmall = ["#니치마케팅", "#지식창업", "#기획자", "#마케터루틴", "#자기관리", "#성장일기", "#퍼스널브랜딩", "#브랜딩", "#1인기업", "#콘텐츠기획", "#오늘의인사이트", "#커리어성장", "#공부인증", "#비즈니스"];
-
-      document.getElementById('tagsLarge').innerHTML = tagsLarge.map(t => `<span class="hashtag-item">${t}</span>`).join('');
-      document.getElementById('tagsMedium').innerHTML = tagsMedium.map(t => `<span class="hashtag-item">${t}</span>`).join('');
-      document.getElementById('tagsSmall').innerHTML = tagsSmall.map(t => `<span class="hashtag-item">${t}</span>`).join('');
+      document.getElementById('tagsLarge').innerHTML = tags1.map(t => `<span class="hashtag-item">${t}</span>`).join('');
+      document.getElementById('tagsNiche').innerHTML = tags2.map(t => `<span class="hashtag-item">${t}</span>`).join('');
+      document.getElementById('tagsLife').innerHTML = tags3.map(t => `<span class="hashtag-item">${t}</span>`).join('');
 
       resultCard.style.display = 'block';
       window.scrollTo({ top: resultCard.offsetTop - 20, behavior: 'smooth' });
-    } catch (err) { alert("데이터 분석 중 오류가 발생했습니다."); }
+    } catch (err) { alert("ZIP 파일 분석 중 오류가 발생했습니다."); }
+  }
+
+  function downloadPDF() {
+    const element = document.getElementById('mainReport');
+    const opt = { margin: 10, filename: `Insta_Report_${currentUserId}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+    html2pdf().set(opt).from(element).save();
+  }
+
+  async function shareResult() {
+    const shareData = { title: 'Insta-Analyzer Pro 리포트', text: `@${currentUserId} 계정 분석 결과: 저장 잠재력 확인 및 성장 전략 리포트`, url: window.location.href };
+    try {
+      if (navigator.share) { await navigator.share(shareData); } 
+      else { alert("현재 환경에서 공유 기능을 지원하지 않습니다. PDF 저장을 이용해 주세요!"); }
+    } catch (err) { console.log('공유 취소:', err); }
   }
 </script>
 </body>
